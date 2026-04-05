@@ -6,29 +6,29 @@ const {authLimiter} = require('./middleware/authLimiter');
 const {globalLimiter} = require('./middleware/globalLimiter');
 const {register,login} = require('./Controllers/authController');
 const {verifyToken} = require('./config/verifyToken');
-const app = express();
 const {userInfo , generateKey} = require('./Controllers/tokenController');
 
 require('./config/mongo');
 
+const app = express();
 
 app.use(helmet()); 
 
-app.use(cors({ origin: '*' })); 
+// === THE VERCEL CORS FIX ===
+const corsOptions = { origin: '*' };
+app.use(cors(corsOptions)); 
+app.options('/*splat', cors(corsOptions));// <-- YOU MUST ADD THIS LINE FOR VERCEL
+// ===========================
 
 app.use(express.json({ limit: '10kb' })); 
 
-
 app.use(globalLimiter);
 
-app.post('/register', authLimiter,register);
-
-app.post('/login', authLimiter, login );
-
+// Routes
+app.post('/register', authLimiter, register);
+app.post('/login', authLimiter, login);
 app.get('/dashboard/me', verifyToken, userInfo);
-
 app.post('/dashboard/generate-key', verifyToken, generateKey);
-
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
