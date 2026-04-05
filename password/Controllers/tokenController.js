@@ -6,6 +6,7 @@ const userInfo = async (req, res) => {
         const user = await User.findById(req.user.userId);
         res.json({ username: user.username, apiKey: user.apiKey });
     } catch (error) {
+        console.error("DASHBOARD ERROR DETAILS:", error);
         res.status(500).json({ error: 'Error fetching user data' });
     }
 }
