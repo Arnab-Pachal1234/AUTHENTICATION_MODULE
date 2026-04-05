@@ -32,10 +32,13 @@ const register = async (req, res) => {
 const login = async (req, res) => {
     try {
         let { username, password } = req.body;
-        
+        //debugging step
+        console.log("username is :- "+username);
+        console.log("the password is :- "+password);
         if (!username || !password) {
             return res.status(400).json({ error: 'Username and password required' });
         }
+
 
         username = String(username);
         password = String(password);
@@ -60,7 +63,7 @@ const login = async (req, res) => {
             res.status(401).json({ error: 'Invalid credentials' });
         }
     } catch (error) {
-        console.error(error);
+        console.log(error);
         res.status(500).json({ error: 'Internal server error' });
     }
 }
