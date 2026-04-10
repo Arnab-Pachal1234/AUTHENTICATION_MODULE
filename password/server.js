@@ -14,7 +14,7 @@ const app = express();
 
 app.use(helmet()); 
 
-// === THE VERCEL CORS FIX ===
+
 const corsOptions = { origin: '*' };
 app.use(cors(corsOptions)); 
 app.options('/*splat', cors(corsOptions));// <-- YOU MUST ADD THIS LINE FOR VERCEL
